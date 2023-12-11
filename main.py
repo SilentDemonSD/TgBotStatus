@@ -21,7 +21,7 @@ try:
     LIST_HOSTS = config("HOSTS")
     CHANNEL_ID = config("CHANNEL_ID", cast=int)
     MESSAGE_ID = config("MESSAGE_ID", cast=int)
-    CHANNEL_NAME = config("CHANNEL_NAME", default="@FZXParadox")
+    CHANNEL_NAME = config("CHANNEL_NAME", default="FZX Paradox")
     TIME_ZONE = config("TIME_ZONE", default="Asia/Kolkata")
 except BaseException as ex:
     log.info(ex)
@@ -50,7 +50,6 @@ async def check_bots():
     start_time = time()
     bot_stats = {}
     log.info("[CHECK] Started Periodic Bot Status checks...")
-    header_msg = f"__**{CHANNEL_NAME} Bot Status :**__\n\n"
     status_message = header_msg + """• **Avaliable Bots :** __Checking...__
 
 • `Currently Ongoing Periodic Check`
@@ -125,7 +124,7 @@ async def check_bots():
 ├ **Date :** `{current_time.strftime('%d %B %Y')}`
 └ **Time Zone :** `{TIME_ZONE} (UTC {current_time.strftime('%z')})`
 
-__○ Auto Status Update in 15 mins Interval__"""
+__○ Auto Status Update in 5 mins Interval__"""
 
     try:
         await client.edit_message(CHANNEL_ID, MESSAGE_ID, status_message)
