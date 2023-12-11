@@ -50,6 +50,7 @@ async def check_bots():
     start_time = time()
     bot_stats = {}
     log.info("[CHECK] Started Periodic Bot Status checks...")
+    header_msg = f"__**{CHANNEL_NAME} Bot Status :**__\n\n"
     status_message = header_msg + """• **Avaliable Bots :** __Checking...__
 
 • `Currently Ongoing Periodic Check`
