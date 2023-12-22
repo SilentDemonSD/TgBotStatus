@@ -1,13 +1,13 @@
 FROM debian:bullseye-slim
 
-RUN apt-get update && apt-get install -y cron && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y cron python3-pip && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
 COPY . /app
 
-RUN pip install --upgrade pip && \
-    pip install python-decouple pytz telethon cryptg
+RUN pip3 install --upgrade pip && \
+    pip3 install python-decouple pytz telethon cryptg
 
 COPY run.sh /app/run.sh
 
