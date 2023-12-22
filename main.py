@@ -23,6 +23,7 @@ try:
     MESSAGE_ID = config("MESSAGE_ID", cast=int)
     CHANNEL_NAME = config("CHANNEL_NAME", default="FZX Paradox")
     TIME_ZONE = config("TIME_ZONE", default="Asia/Kolkata")
+    INTERVAL = config("INTERVAL", 300) # Time interval in seconds between checks
 except BaseException as ex:
     log.info(ex)
     exit(1)
@@ -57,10 +58,14 @@ async def check_bots():
 
 """
     try:
-        await client.edit_message(CHANNEL_ID, MESSAGE_ID, status_message + f"""**Status Update Stats:**
+        await client.edit_message(
+            CHANNEL_ID,
+            MESSAGE_ID,
+            f"""{status_message}**Status Update Stats:**
 ┌ **Bots Verified :** 0 out of {len(BOTS)}
 ├ **Progress :** [○○○○○○○○○○] 0%
-└ **Time Elasped :** 0s""")
+└ **Time Elasped :** 0s""",
+        )
     except BaseException as e:
         log.warning("[EDIT] Unable to edit message in the channel!")
         log.error(e)
@@ -87,38 +92,44 @@ async def check_bots():
                 bot_stats[bot] = {"response_time": f"`{round(resp_time * 1000, 2)}ms`", "status": "✅", "host": host or "Unknown"}
         except BaseException:
             bot_stats[bot] = {"response_time": None, "status": "❌", "host": host or "Unknown"}
-        
+
         await client.send_read_acknowledge(bot)
         log.info(f"[CHECK] Checked @{bot} - {bot_stats[bot]['status']}.")
         bot_no += 1
-        
-        await client.edit_message(CHANNEL_ID, MESSAGE_ID, status_message + f"""**Status Update Stats:**
+
+        await client.edit_message(
+            CHANNEL_ID,
+            MESSAGE_ID,
+            f"""{status_message}**Status Update Stats:**
 ┌ **Bots Verified :** {bot_no} out of {len(BOTS)}
 ├ **Progress :** {progress_bar(bot_no, len(BOTS))}
-└ **Time Elasped :** {round(time() - start_time, 2)}s""")
+└ **Time Elasped :** {round(time() - start_time, 2)}s""",
+        )
 
     end_time = time()
     log.info("[CHECK] Completed periodic checks.")
 
-    status_message = header_msg + f"• **Avaliable Bots :** {avl_bots} out of {len(BOTS)}\n\n"
-    for bot, value in bot_stats.items():
-        if bot_stats[bot]["response_time"] is None:
-            status_message += f"""┌ **Bot :** @{bot}
+    status_message = (
+        f"{header_msg}• **Avaliable Bots :** {avl_bots} out of {len(BOTS)}\n\n"
+    )
+    for bot in bot_stats:
+        status_message += (
+            f"""┌ **Bot :** @{bot}
 ├ **Status :** {bot_stats[bot]['status']}
 └ **Host :** {bot_stats[bot]['host']}
             
 """
-        else:
-            status_message += f"""┌ **Bot :** @{bot}
+            if bot_stats[bot]["response_time"] is None
+            else f"""┌ **Bot :** @{bot}
 ├ **Ping :** {bot_stats[bot]['response_time']}
 ├ **Status :** {bot_stats[bot]['status']}
 └ **Host :** {bot_stats[bot]['host']}
             
 """
-
+        )
     total_time = end_time - start_time
     status_message += f"• **Last Periodic Checked in {round(total_time, 2)}s**\n\n"
-    
+
     current_time = datetime.now(utc).astimezone(timezone(TIME_ZONE))
     status_message += f"""• **Last Check Details :**
 ┌ **Time :** `{current_time.strftime('%H:%M:%S')} hrs`
@@ -135,4 +146,12 @@ __○ Auto Status Update in 5 mins Interval__"""
         return
 
 
-client.loop.run_until_complete(check_bots())
+async def main():
+    while True:
+        log.info("Running periodic check...")
+        await check_bots()
+        log.info(f"Sleeping for {INTERVAL} seconds...")
+        await sleep(INTERVAL)
+
+if __name__ == "__main__":
+    client.loop.run_until_complete(main())
