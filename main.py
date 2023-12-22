@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import asyncio
 from asyncio import sleep
 from logging import basicConfig, INFO, getLogger
 from time import time
@@ -142,7 +141,7 @@ async def main():
         log.info("Running periodic check...")
         await check_bots()
         log.info(f"Sleeping for {INTERVAL} seconds...")
-        await asyncio.sleep(INTERVAL)
+        await sleep(INTERVAL)
 
 if __name__ == "__main__":
     client.loop.run_until_complete(main())
