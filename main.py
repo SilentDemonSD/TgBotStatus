@@ -23,6 +23,7 @@ try:
     MESSAGE_ID = config("MESSAGE_ID", cast=int)
     CHANNEL_NAME = config("CHANNEL_NAME", default="FZX Paradox")
     TIME_ZONE = config("TIME_ZONE", default="Asia/Kolkata")
+    INTERVAL = config("INTERVAL", 300) # Time interval in seconds between checks
 except BaseException as ex:
     log.info(ex)
     exit(1)
@@ -135,4 +136,12 @@ __○ Auto Status Update in 5 mins Interval__"""
         return
 
 
-client.loop.run_until_complete(check_bots())
+async def main():
+    while True:
+        log.info("Running periodic check...")
+        await check_bots()
+        log.info(f"Sleeping for {INTERVAL} seconds...")
+        await sleep(INTERVAL)
+
+if __name__ == "__main__":
+    client.loop.run_until_complete(main())
