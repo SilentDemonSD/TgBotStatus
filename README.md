@@ -17,7 +17,7 @@ A Simple Telegram Status Updater to Pretify All your Bots for your Channel in si
 ## ***Repo Config SetUp***:
 
 ### _`.env` File SetUp :_
-- `APP_ID`: Authenticate your Telegram account, get this from https://my.telegram.org.
+- `API_ID`: Authenticate your Telegram account, get this from https://my.telegram.org.
 - `API_HASH`: Authenticate your Telegram account, get this from https://my.telegram.org.
 - `PYRO_SESSION`: Pyrogram User Session to Access Bots, Generate from [Here](https://colab.research.google.com/drive/1wjYvtwUo5zDsUvukyafAR9Of-2NYkKsu)
 - `HEADER_MSG` : Put Header Msg for 1st Line. 

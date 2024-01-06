@@ -43,7 +43,7 @@ if CONFIG_JSON_URL := getenv('CONFIG_JSON_URL'):
 
 load_dotenv('.env', override=True)
 
-APP_ID = int(getenv("APP_ID", 0))
+API_ID = int(getenv("API_ID", 0))
 API_HASH = getenv("API_HASH")
 PYRO_SESSION = getenv('PYRO_SESSION')
 if PYRO_SESSION is None:
