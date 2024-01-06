@@ -57,7 +57,7 @@ try:
     bots = config['bots']
     channels = config['channels']
 except:
-    LOGGER.error("Error: config.json is not valid")
+    log.error("Error: config.json is not valid")
     exit(1)
 
 HEADER_MSG = getenv("HEADER_MSG", "Telegram Bot Status:")
@@ -119,7 +119,7 @@ async def editMsg(chat_id, message_id, text):
 async def editStatusMsg(status_msg):
     _channels = channels.values()
     if len(_channels) == 0:
-        LOGGER.warning("No channels found")
+        log.warning("No channels found")
         exit(1)
     for channel in _channels:
         log.info(f"Updating {channel['chat_id']}: {channel['message_id']}")
