@@ -190,7 +190,7 @@ async def check_bots():
 
     status_message = header_msg + f"• **Avaliable Bots :** {avl_bots} out of {len(totalBotsCount)}\n\n"
     for bot in bot_stats.keys():
-        status_message += f"┌ **Bot :** {(await bot_info(bdata['bot_uname'])} ( @{bdata['bot_uname']} )"
+        status_message += f"┌ **Bot :** {await bot_info(bdata['bot_uname'])} ( @{bdata['bot_uname']} )"
         if (stdata := bot_stats[bot].get('status_data')):
             try:
                 status_message += f'├ **Commit Date :** {stdata["commit_date"]}\n'
