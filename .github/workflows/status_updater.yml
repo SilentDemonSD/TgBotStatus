@@ -9,28 +9,26 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - name: Initial Checkout
+      - name: Initialize Checkout
         uses: actions/checkout@v4
-      - name: Set Up Python
+      - name: SetUp Python3
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-      - name: Clone the Repo
+      - name: Clone the Repository
         uses: actions/checkout@master
         with:
           repository: ${{ secrets.REPO_NAME }}
       - name: Install Dependencies
         run: |
           pip install --upgrade pip
-          pip install python-decouple pytz telethon cryptg
-      - name: Run the UserClient
+          pip install requests python-dotenv pytz pyrofork tgcrypto
+      - name: Run the UserClient Script
         run: |
           python3 main.py
         env:
           APP_ID: ${{ secrets.APP_ID }}
           API_HASH: ${{ secrets.API_HASH }}
-          BOTS: ${{ secrets.BOTS }}
-          HOSTS: ${{ secrets.HOSTS }}
-          SESSION: ${{ secrets.SESSION }}
-          CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
-          MESSAGE_ID: ${{ secrets.MESSAGE_ID }}
+          PYRO_SESSION: ${{ secrets.PYRO_SESSION }}
+          CONFIG_JSON_URL: ${{ secrets.CONFIG_JSON_URL }}
+          CONFIG_ENV_URL: ${{ secrets.CONFIG_ENV_URL }}
