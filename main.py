@@ -165,7 +165,7 @@ async def check_bots():
             await sleep(10)
             msg_history = await client.invoke(
                 GetHistory(
-                    peer=client.resolve_peer(bdata['bot_uname']), offset_id=0, offset_date=None, add_offset=0, limit=1, max_id=0, min_id=0, hash=0,
+                    peer=await client.resolve_peer(bdata['bot_uname']), offset_id=0, offset_date=None, add_offset=0, limit=1, max_id=0, min_id=0, hash=0,
                 )
             )
             if sent_msg.id == msg_history.id:
