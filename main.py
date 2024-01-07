@@ -60,8 +60,8 @@ except Exception as e:
     log.error("Error: config.json is not valid")
     exit(1)
 
-HEADER_MSG = getenv("HEADER_MSG", "Telegram Bot Status:")
-FOOTER_MSG = getenv("FOOTER_MSG", "Join FZX Paradox at @FZXParadox")
+HEADER_MSG = getenv("HEADER_MSG", "**Telegram Bot Status :**")
+FOOTER_MSG = getenv("FOOTER_MSG", "_Join FZX Paradox at @FZXParadox_\n**Repo :** __https://github.com/SilentDemonSD/TgBotStatus__")
 TIME_ZONE = getenv("TIME_ZONE", "Asia/Kolkata")
 
 log.info("Connecting pyroBotClient")
@@ -145,7 +145,7 @@ async def check_bots():
 • `Currently Ongoing Periodic Check`
 
 """
-    await editStatusMsg(status_message + f"""**Status Update Stats:**
+    await editStatusMsg(status_message + f"""**• Status Update Stats:**
 ┌ **Bots Verified :** 0 out of {totalBotsCount}
 ├ **Progress :** [○○○○○○○○○○] 0%
 └ **Time Elasped :** 0s""")
@@ -195,7 +195,7 @@ async def check_bots():
 
     status_message = header_msg + f"• **Avaliable Bots :** {avl_bots} out of {totalBotsCount}\n\n"
     for bot in bot_stats.keys():
-        status_message += f"┌ **Bot :** {await bot_info(bot_stats[bot]['bot_uname'])}\n├ **Username :** {bot_stats[bot]['bot_uname']} )\n"
+        status_message += f"┌ **Bot :** {await bot_info(bot_stats[bot]['bot_uname'])}\n├ **Username :** {bot_stats[bot]['bot_uname']}\n"
         if (stdata := bot_stats[bot].get('status_data')):
             try:
                 status_message += f'├ **Commit Date :** {stdata["commit_date"]}\n'
@@ -210,9 +210,9 @@ async def check_bots():
             except:
                 pass
             try:
-                status_message += f'├ **Up :** {get_readable_size(stdata["network"]["sent"])} '
-                status_message += f'| **DL :** {get_readable_size(stdata["network"]["recv"])}\n'
-                status_message += f'├ **Free Disk :** {get_readable_size(stdata["free_disk"])} / {get_readable_size(stdata["total_disk"])}\n'
+                status_message += f'├ **Upload Stats :** {get_readable_size(stdata["network"]["sent"])} '
+                status_message += f'| **Download Stats :** {get_readable_size(stdata["network"]["recv"])}\n'
+                status_message += f'├ **Disk Free :** {get_readable_size(stdata["free_disk"])} / {get_readable_size(stdata["total_disk"])}\n'
             except:
                 status_message += '├ **Something went Wrong!**'
         
@@ -232,7 +232,7 @@ async def check_bots():
 ├ **Date :** `{current_time.strftime('%d %B %Y')}`
 └ **Time Zone :** `{TIME_ZONE} (UTC {current_time.strftime('%z')})`
 
-__○ Auto Status Update in 5 mins Interval__
+__• Auto Status Update in 5 mins Interval__
 
 {FOOTER_MSG}"""
     await editStatusMsg(status_message)
