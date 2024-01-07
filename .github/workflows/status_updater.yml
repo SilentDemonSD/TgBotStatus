@@ -27,7 +27,7 @@ jobs:
         run: |
           python3 main.py
         env:
-          APP_ID: ${{ secrets.APP_ID }}
+          API_ID: ${{ secrets.API_ID }}
           API_HASH: ${{ secrets.API_HASH }}
           PYRO_SESSION: ${{ secrets.PYRO_SESSION }}
           CONFIG_JSON_URL: ${{ secrets.CONFIG_JSON_URL }}

@@ -94,7 +94,7 @@ Either Add these URL to these Variables or Directly Add a File on Repo as File n
 ### _Procedure:_
 - **Step 1:** _Fork & Star the Repo_
 - **Step 2:** _Set Variables in Secrets in Settings Tab_
-  > Available Variables: APP_ID, API_HASH, PYRO_SESSION, CONFIG_ENV_URL, CONFIG_JSON_URL
+  > Available Variables: API_ID, API_HASH, PYRO_SESSION, CONFIG_ENV_URL, CONFIG_JSON_URL
 - **Step 3:** _Enable `Actions` -> `Select Workflow` -> `Run Workflow`_
 
 ---

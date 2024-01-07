@@ -68,7 +68,7 @@ TIME_ZONE = getenv("TIME_ZONE", "Asia/Kolkata")
 
 log.info("Connecting pyroBotClient")
 try:
-    client = Client("TgBotStatus", api_id=APP_ID, api_hash=API_HASH, session_string=PYRO_SESSION)
+    client = Client("TgBotStatus", api_id=API_ID, api_hash=API_HASH, session_string=PYRO_SESSION)
 except BaseException as e:
     log.warning(e)
     exit(1)
