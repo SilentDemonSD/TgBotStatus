@@ -111,7 +111,7 @@ async def bot_info(user_id):
     
 async def editMsg(chat_id, message_id, text):
     try:
-        return await client.edit_message(chat_id, message_id, text)
+        return await client.edit_message_text(chat_id, int(message_id), text)
     except FloodWait as f:
         await sleep(f.value * 1.2)
         await editMsg(chat_id, message_id, text)
