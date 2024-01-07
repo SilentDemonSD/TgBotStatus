@@ -111,7 +111,7 @@ async def bot_info(user_id):
     
 async def editMsg(chat_id, message_id, text):
     try:
-        return client.edit_message(chat_id, message_id, text)
+        return await client.edit_message(chat_id, message_id, text)
     except FloodWait as f:
         await sleep(f.value * 1.2)
         await editMsg(chat_id, message_id, text)
@@ -124,7 +124,7 @@ async def editStatusMsg(status_msg):
         log.warning("No channels found")
         exit(1)
     for channel in _channels:
-        log.info(f"Updating {channel['chat_id']}: {channel['message_id']}")
+        log.info(f"Updating Channel ID : {channel['chat_id']} & Message ID : {channel['message_id']}")
         await sleep(1.5)
         try:
             await editMsg(channel['chat_id'], channel['message_id'], status_msg)
