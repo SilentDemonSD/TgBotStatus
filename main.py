@@ -145,7 +145,7 @@ async def check_bots():
 
 """
     await editStatusMsg(status_message + f"""**Status Update Stats:**
-┌ **Bots Verified :** 0 out of {len(totalBotsCount)}
+┌ **Bots Verified :** 0 out of {totalBotsCount}
 ├ **Progress :** [○○○○○○○○○○] 0%
 └ **Time Elasped :** 0s""")
 
@@ -183,14 +183,14 @@ async def check_bots():
         bot_no += 1
         
         await editStatusMsg(status_message + f"""**Status Update Stats:**
-┌ **Bots Checked :** {bot_no} out of {len(totalBotsCount)}
-├ **Progress :** {progress_bar(bot_no, len(totalBotsCount))}
+┌ **Bots Checked :** {bot_no} out of {totalBotsCount}
+├ **Progress :** {progress_bar(bot_no, totalBotsCount)}
 └ **Time Elasped :** {round(time() - start_time, 2)}s""")
 
     end_time = time()
     log.info("Completed periodic checks.")
 
-    status_message = header_msg + f"• **Avaliable Bots :** {avl_bots} out of {len(totalBotsCount)}\n\n"
+    status_message = header_msg + f"• **Avaliable Bots :** {avl_bots} out of {totalBotsCount}\n\n"
     for bot in bot_stats.keys():
         status_message += f"┌ **Bot :** {await bot_info(bdata['bot_uname'])} ( @{bdata['bot_uname']} )"
         if (stdata := bot_stats[bot].get('status_data')):
