@@ -5,15 +5,13 @@ from json import loads as json_loads
 from time import time
 from os import getenv, path as ospath 
 from datetime import datetime
-from itertools import zip_longest
 
 from pytz import utc, timezone
 from dotenv import load_dotenv
 from requests import get as rget
 from pyrogram import Client
 from pyrogram.errors import FloodWait, MessageNotModified
-from pyrogram.raw.types import InputPeerChat
-from pyrogram.raw.functions.messages import GetHistory
+from pyrogram.raw import functions
 
 basicConfig(level=INFO, format="[%(levelname)s] %(asctime)s - %(message)s")
 log = getLogger(__name__)
@@ -111,7 +109,7 @@ async def bot_info(user_id):
     
 async def editMsg(chat_id, message_id, text):
     try:
-        return await client.edit_message_text(chat_id, int(message_id), text)
+        return await client.edit_message_text(int(chat_id), int(message_id), text)
     except FloodWait as f:
         await sleep(f.value * 1.2)
         await editMsg(chat_id, message_id, text)
@@ -163,23 +161,24 @@ async def check_bots():
         try:
             sent_msg = await client.send_message(bdata['bot_uname'], "/start")
             await sleep(10)
-            msg_history = await client.invoke(
-                GetHistory(
-                    peer=await client.resolve_peer(bdata['bot_uname']), offset_id=0, offset_date=None, add_offset=0, limit=1, max_id=0, min_id=0, hash=0,
+            history_msgs = await client.invoke(
+                functions.messages.GetHistory(
+                    peer=await client.resolve_peer(bdata['bot_uname']), offset_id=0, offset_date=0, add_offset=0, limit=1, max_id=0, min_id=0, hash=0,
                 )
             )
-            if sent_msg.id == msg_history.id:
+            if sent_msg.id == history_msgs.messages[0].id:
                 bot_stats[bot]["status"] = "❌"
             else:
-                resp_time = abs(msg_history.date.timestamp() - pre_time)
+                resp_time = history_msgs.messages[0].date - int(pre_time)
                 avl_bots += 1
                 bot_stats[bot]["response_time"] = f"`{round(resp_time * 1000, 2)}ms`"
                 bot_stats[bot]["status"] = "✅"
-        except BaseException:
+            await client.read_chat_history(bdata['bot_uname'])
+        except Exception as e:
+            log.info(str(e))
             bot_stats[bot]["status"] = "❌"
         
-        await client.read_chat_history(bdata['bot_uname'])
-        log.info(f"Checked @{bdata['bot_uname']} - {bot_stats[bot]['status']}.")
+        log.info(f"Checked {bdata['bot_uname']} & Status : {bot_stats[bot]['status']}.")
         bot_no += 1
         
         await editStatusMsg(status_message + f"""**Status Update Stats:**
