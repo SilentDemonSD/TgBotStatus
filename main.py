@@ -213,8 +213,9 @@ async def check_bots():
                 status_message += f'├ **Upload Stats :** {get_readable_size(stdata["network"]["sent"])} '
                 status_message += f'| **Download Stats :** {get_readable_size(stdata["network"]["recv"])}\n'
                 status_message += f'├ **Disk Free :** {get_readable_size(stdata["free_disk"])} / {get_readable_size(stdata["total_disk"])}\n'
-            except:
-                status_message += '├ **Something went Wrong!**'
+            except Exception as e:
+                log.error(str(e))
+                status_message += '├ **Something went Wrong!**\n'
         
         if bot_stats[bot].get("response_time"):
             status_message += f"├ **Ping :** {bot_stats[bot]['response_time']}\n"
