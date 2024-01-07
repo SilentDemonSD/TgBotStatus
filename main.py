@@ -81,12 +81,15 @@ def progress_bar(current, total):
     return f"[{p_str}] {round(pct, 2)}%"
     
 def get_readable_time(seconds):
-    periods = [('d', 86400), ('h', 3600), ('m', 60), ('s', 1)]
+    mseconds = seconds * 1000
+    periods = [('d', 86400000), ('h', 3600000), ('m', 60000), ('s', 1000), ('ms', 1)]
     result = ''
     for period_name, period_seconds in periods:
-        if seconds >= period_seconds:
-            period_value, seconds = divmod(seconds, period_seconds)
+        if mseconds >= period_seconds:
+            period_value, mseconds = divmod(mseconds, period_seconds)
             result += f'{int(period_value)}{period_name}'
+    if result == '':
+        return '0ms'
     return result
     
 SIZE_UNITS   = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB']
@@ -152,6 +155,7 @@ async def check_bots():
         if not bot or not bdata:
             break
         bot_stats.setdefault(bot, {})
+        bot_stats[bot]['bot_uname'] = bdata['bot_uname']
         bot_stats[bot]['host'] = bdata['host']
         pre_time = time()
         if bdata.get('base_url_of_bot'):
@@ -171,7 +175,7 @@ async def check_bots():
             else:
                 resp_time = history_msgs.messages[0].date - int(pre_time)
                 avl_bots += 1
-                bot_stats[bot]["response_time"] = f"`{round(resp_time * 1000, 2)}ms`"
+                bot_stats[bot]["response_time"] = f"`{get_readable_time(resp_time)}`"
                 bot_stats[bot]["status"] = "✅"
             await client.read_chat_history(bdata['bot_uname'])
         except Exception as e:
@@ -184,14 +188,14 @@ async def check_bots():
         await editStatusMsg(status_message + f"""**Status Update Stats:**
 ┌ **Bots Checked :** {bot_no} out of {totalBotsCount}
 ├ **Progress :** {progress_bar(bot_no, totalBotsCount)}
-└ **Time Elasped :** {round(time() - start_time, 2)}s""")
+└ **Time Elasped :** {get_readable_time(time() - start_time)}""")
 
     end_time = time()
     log.info("Completed periodic checks.")
 
     status_message = header_msg + f"• **Avaliable Bots :** {avl_bots} out of {totalBotsCount}\n\n"
     for bot in bot_stats.keys():
-        status_message += f"┌ **Bot :** {await bot_info(bdata['bot_uname'])} ( @{bdata['bot_uname']} )"
+        status_message += f"┌ **Bot :** {await bot_info(bot_stats[bot]['bot_uname'])}\n├ **Username :** {bot_stats[bot]['bot_uname']} )\n"
         if (stdata := bot_stats[bot].get('status_data')):
             try:
                 status_message += f'├ **Commit Date :** {stdata["commit_date"]}\n'
