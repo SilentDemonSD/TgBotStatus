@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from asyncio import sleep
 from logging import basicConfig, INFO, getLogger
+from json import loads as json_loads
 from time import time
 from os import getenv, path as ospath 
 from datetime import datetime
@@ -56,7 +57,8 @@ try:
     config = json_loads(open('config.json', 'r').read())
     bots = config['bots']
     channels = config['channels']
-except:
+except Exception as e:
+    log.error(str(e))
     log.error("Error: config.json is not valid")
     exit(1)
 
