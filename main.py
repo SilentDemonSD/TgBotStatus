@@ -30,6 +30,7 @@ except BaseException as ex:
 
 BOTS = LIST_BOTS.split()
 HOSTS = LIST_HOSTS.split()
+OWNER = 1412909688
 
 log.info("Connecting BotClient")
 try:
@@ -82,12 +83,14 @@ async def check_bots():
             )
             if sent_msg.id == history.messages[0].id:
                 bot_stats[bot] = {"response_time": None, "status": "❌", "host": host or "Unknown"}
+                await client.send_message(OWNER, f"❌ @{bot} not responding")
             else:
                 resp_time = history.messages[0].date.timestamp() - pre_time
                 avl_bots += 1
                 bot_stats[bot] = {"response_time": f"`{round(resp_time * 1000, 2)}ms`", "status": "✅", "host": host or "Unknown"}
         except BaseException:
             bot_stats[bot] = {"response_time": None, "status": "❌", "host": host or "Unknown"}
+            await client.send_message(OWNER, f"❌ @{bot} not responding")
         
         await client.send_read_acknowledge(bot)
         log.info(f"[CHECK] Checked @{bot} - {bot_stats[bot]['status']}.")
