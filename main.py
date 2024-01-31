@@ -21,7 +21,7 @@ try:
     LIST_HOSTS = config("HOSTS")
     CHANNEL_ID = config("CHANNEL_ID", cast=int)
     MESSAGE_ID = config("MESSAGE_ID", cast=int)
-    CHANNEL_NAME = config("CHANNEL_NAME", default="FZX Paradox")
+    CHANNEL_NAME = config("CHANNEL_NAME", default="@HybridUpdates")
     TIME_ZONE = config("TIME_ZONE", default="Asia/Kolkata")
     INTERVAL = config("INTERVAL", 300) # Time interval in seconds between checks
 except BaseException as ex:
@@ -43,14 +43,14 @@ def progress_bar(current, total):
     pct = float(str(pct).strip('%'))
     p = min(max(pct, 0), 100)
     cFull = int(p // 8)
-    p_str = '●' * cFull
-    p_str += '○' * (12 - cFull)
+    p_str = '▬' * cFull
+    p_str += '▭' * (12 - cFull)
     return f"[{p_str}] {round(pct, 2)}%"
 
 async def check_bots():
     start_time = time()
     bot_stats = {}
-    log.info("[CHECK] Started Periodic Bot Status checks...")
+    log.info("**⚠️ Periodic Bot status check in progress...**")
     header_msg = f"__**{CHANNEL_NAME} Bot Status :**__\n\n"
     status_message = header_msg + """• **Avaliable Bots :** __Checking...__
 
@@ -60,7 +60,7 @@ async def check_bots():
     try:
         await client.edit_message(CHANNEL_ID, MESSAGE_ID, status_message + f"""**Status Update Stats:**
 ┌ **Bots Verified :** 0 out of {len(BOTS)}
-├ **Progress :** [○○○○○○○○○○] 0%
+├ **Progress :** [▭▭▭▭▭▭▭▭▭▭] 0%
 └ **Time Elasped :** 0s""")
     except BaseException as e:
         log.warning("[EDIT] Unable to edit message in the channel!")
