@@ -69,7 +69,8 @@ async def check_bots():
 
 """
     try:
-        await app.edit_message_text(CHANNEL_ID, MESSAGE_ID, status_message + f"""**Status Update Stats:**
+        msg = await app.get_messages(CHANNEL_ID, MESSAGE_ID)
+        await msg.edit(status_message + f"""**Status Update Stats:**
 ┌ **Bots Verified :** 0 out of {len(BOTS)}
 ├ **Progress :** [▭▭▭▭▭▭▭▭▭▭] 0%
 └ **Time Elasped :** 0s""")
@@ -108,7 +109,7 @@ async def check_bots():
         log.info(f"[CHECK] Checked @{bot} - {bot_stats[bot]['status']}.")
         bot_no += 1
         
-        await app.edit_message_text(CHANNEL_ID, MESSAGE_ID, status_message + f"""**Status Update Stats:**
+        await msg.edit(status_message + f"""**Status Update Stats:**
 ┌ **Bots Verified :** {bot_no} out of {len(BOTS)}
 ├ **Progress :** {progress_bar(bot_no, len(BOTS))}
 └ **Time Elasped :** {round(time() - start_time, 2)}s""")
@@ -144,7 +145,7 @@ async def check_bots():
 __○ Auto Status Update in 5 mins Interval__"""
 
     try:
-        await app.edit_message_text(CHANNEL_ID, MESSAGE_ID, status_message)
+        await msg.edit(status_message)
     except BaseException as e:
         log.warning("[EDIT] Unable to edit message in the channel!")
         log.error(e)
