@@ -80,11 +80,11 @@ async def check_bots():
         return
 
     bot_no, avl_bots = 0, 0
+    ErrorMsg = ""
     for bot, host in zip_longest(BOTS, HOSTS):
         if bot is None:
             break
         pre_time = time()
-        ErrorMsg = ""
         try:
             sent_msg = await client.send_message(bot, "/start")
             await sleep(10)
@@ -104,7 +104,6 @@ async def check_bots():
             bot_stats[bot] = {"response_time": None, "status": "❌", "host": host or "Unknown"}
             ErrorMsg += f"❌ @{bot} not responding\n"
         
-        await app.send_message(OWNER, ErrorMsg)
         await client.send_read_acknowledge(bot)
         log.info(f"[CHECK] Checked @{bot} - {bot_stats[bot]['status']}.")
         bot_no += 1
@@ -146,6 +145,7 @@ __○ Auto Status Update in 5 mins Interval__"""
 
     try:
         await msg.edit(status_message)
+        await app.send_message(OWNER, ErrorMsg)
     except BaseException as e:
         log.warning("[EDIT] Unable to edit message in the channel!")
         log.error(e)
