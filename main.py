@@ -10,12 +10,16 @@ from decouple import config
 from telethon import TelegramClient, functions
 from telethon.sessions import StringSession
 
+from pyrogram import Client
+from pyrogram.types import Message
+
 basicConfig(level=INFO, format="[%(levelname)s] %(asctime)s - %(message)s")
 log = getLogger("TgBotStatus")
 
 try:
     APP_ID = config("APP_ID", cast=int)
     API_HASH = config("API_HASH")
+    BOT_TOKEN = config("BOT_TOKEN")
     SESSION = config("SESSION")
     LIST_BOTS = config("BOTS")
     LIST_HOSTS = config("HOSTS")
@@ -35,6 +39,12 @@ OWNER = 1412909688
 log.info("Connecting BotClient")
 try:
     client = TelegramClient(StringSession(SESSION), api_id=APP_ID, api_hash=API_HASH).start()
+    app = Client(
+        name="status",
+        api_id=APP_ID,
+        api_hash=API_HASH,
+        bot_token=BOT_TOKEN,
+    ).start()
 except BaseException as e:
     log.warning(e)
     exit(1)
@@ -59,7 +69,7 @@ async def check_bots():
 
 """
     try:
-        await client.edit_message(CHANNEL_ID, MESSAGE_ID, status_message + f"""**Status Update Stats:**
+        await app.edit_message_text(CHANNEL_ID, MESSAGE_ID, status_message + f"""**Status Update Stats:**
 ┌ **Bots Verified :** 0 out of {len(BOTS)}
 ├ **Progress :** [▭▭▭▭▭▭▭▭▭▭] 0%
 └ **Time Elasped :** 0s""")
@@ -73,6 +83,7 @@ async def check_bots():
         if bot is None:
             break
         pre_time = time()
+        ErrorMsg = ""
         try:
             sent_msg = await client.send_message(bot, "/start")
             await sleep(10)
@@ -83,20 +94,21 @@ async def check_bots():
             )
             if sent_msg.id == history.messages[0].id:
                 bot_stats[bot] = {"response_time": None, "status": "❌", "host": host or "Unknown"}
-                await client.send_message(OWNER, f"❌ @{bot} not responding")
+                ErrorMsg += f"❌ @{bot} not responding\n"
             else:
                 resp_time = history.messages[0].date.timestamp() - pre_time
                 avl_bots += 1
                 bot_stats[bot] = {"response_time": f"`{round(resp_time * 1000, 2)}ms`", "status": "✅", "host": host or "Unknown"}
         except BaseException:
             bot_stats[bot] = {"response_time": None, "status": "❌", "host": host or "Unknown"}
-            await client.send_message(OWNER, f"❌ @{bot} not responding")
+            ErrorMsg += f"❌ @{bot} not responding\n"
         
+        await app.send_message(OWNER, ErrorMsg)
         await client.send_read_acknowledge(bot)
         log.info(f"[CHECK] Checked @{bot} - {bot_stats[bot]['status']}.")
         bot_no += 1
         
-        await client.edit_message(CHANNEL_ID, MESSAGE_ID, status_message + f"""**Status Update Stats:**
+        await app.edit_message_text(CHANNEL_ID, MESSAGE_ID, status_message + f"""**Status Update Stats:**
 ┌ **Bots Verified :** {bot_no} out of {len(BOTS)}
 ├ **Progress :** {progress_bar(bot_no, len(BOTS))}
 └ **Time Elasped :** {round(time() - start_time, 2)}s""")
@@ -132,7 +144,7 @@ async def check_bots():
 __○ Auto Status Update in 5 mins Interval__"""
 
     try:
-        await client.edit_message(CHANNEL_ID, MESSAGE_ID, status_message)
+        await app.edit_message_text(CHANNEL_ID, MESSAGE_ID, status_message)
     except BaseException as e:
         log.warning("[EDIT] Unable to edit message in the channel!")
         log.error(e)
