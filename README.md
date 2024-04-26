@@ -34,6 +34,7 @@ _A Simple Telegram Status Updater to Pretify All your Bots for your Channel in s
   > Default: Telegram Bot Status :
 - `TIME_ZONE`: Time Zone for Sync with your Local Time
   > Default: Asia/Kolkata
+- `BOT_TOKEN`: (Optional) Only Required if `MSG_BUTTONS` is added for Post Buttons.
 - `MSG_BUTTONS`: Make Awesome Telegram Buttons to show at the bottom of the Text.
   > Unlimited Buttons with Any Design ! 
   - ***How to Use ?***

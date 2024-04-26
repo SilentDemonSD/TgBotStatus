@@ -46,6 +46,7 @@ load_dotenv('.env', override=True)
 API_ID = int(getenv("API_ID", 0))
 API_HASH = getenv("API_HASH")
 PYRO_SESSION = getenv('PYRO_SESSION')
+BOT_TOKEN = getenv('BOT_TOKEN')
 if PYRO_SESSION is None:
     log.error('PYRO_SESSION is not set')
     exit(1)
@@ -72,6 +73,12 @@ try:
 except BaseException as e:
     log.warning(e)
     exit(1)
+if BOT_TOKEN:
+    try:
+        bot = Client("TgBotStatus", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN, no_updates=True)
+    except BaseException as e:
+        log.warning(e)
+        exit(1)
 
 def progress_bar(current, total):
     pct = current/total * 100
@@ -114,8 +121,6 @@ async def bot_info(user_id):
         
 def make_btns():
     btns = []
-    if not MSG_BUTTONS:
-        return None
     for row in MSG_BUTTONS.split('||'):
         row_btns = []
         for sbtn in row.split('|'):
@@ -126,8 +131,11 @@ def make_btns():
 
 async def editMsg(chat_id, message_id, text):
     try:
-        return await client.edit_message_text(int(chat_id), int(message_id), text, 
+        post_msg = await client.edit_message_text(int(chat_id), int(message_id), text, 
             disable_web_page_preview=True)
+        if BOT_TOKEN and MSG_BUTTONS:
+            async with bot:
+                await bot.edit_message_reply_markup(post_msg.chat.id, post_msg.id, make_btns())
     except FloodWait as f:
         await sleep(f.value * 1.2)
         await editMsg(chat_id, message_id, text)
