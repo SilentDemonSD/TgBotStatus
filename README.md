@@ -1,9 +1,19 @@
-## TgBotStatus
-A Simple Telegram Status Updater to Pretify All your Bots for your Channel in single Status..
+<div align="center">
+
+<a href="https://github.com/weebzone/WZML">
+      <kbd>
+          <img width="450" src="https://te.legra.ph/file/6ca914415e991851975ea.jpg" alt="Tg Updater Logo">
+      </kbd>
+</a>
+    
+## ***TgBotStatus***
+_A Simple Telegram Status Updater to Pretify All your Bots for your Channel in single Status... with Advance Stats_
+
+</div>
 
 ---
 
-## ***Features***
+## 📇 ***Features***
 - _Sequential Status Check_
 - _Progress Bar on Checking_
 - _Calculate Ping Time of Response_
@@ -14,7 +24,7 @@ A Simple Telegram Status Updater to Pretify All your Bots for your Channel in si
 
 ---
 
-## ***Repo Config SetUp***:
+## 📦 ***Repo Config SetUp***:
 
 ### _`.env` File SetUp :_
 - `API_ID`: Authenticate your Telegram account, get this from https://my.telegram.org.
@@ -44,7 +54,7 @@ A Simple Telegram Status Updater to Pretify All your Bots for your Channel in si
     |`chat_id`|chat id of the Target Channel or Group|*Required|
     |`message_id`|message id of the Message to Edit. If link is https://t.me/cha_uname/123 Here, 123 is the Message ID|*Required|
 
-#### Sample JSON Format
+#### 🪧 ***Sample JSON Format***
 ```json
 {
   "bots": {
@@ -61,11 +71,11 @@ A Simple Telegram Status Updater to Pretify All your Bots for your Channel in si
   },
   "channels": {
     "chat1": {
-      "chat_id": "-100987654321",
+      "chat_id": "-100xxxxxx",
       "message_id": "54321"
     },
     "chat2": {
-      "chat_id": "-100123456789",
+      "chat_id": "-100xxxxxxx",
       "message_id": "12345"
     }
     ...more
@@ -79,11 +89,12 @@ Either Add these URL to these Variables or Directly Add a File on Repo as File n
 - `CONFIG_ENV_URL`: _(Optional if .env provided)_ Direct URL of `.env` file posted on [gist.github.com](https://gist.github.com)
 - `CONFIG_JSON_URL`:  _(Optional if config.json provided)_ Direct URL of `config.json` file posted on [gist.github.com](https://gist.github.com)
 
-> NOTE: CONFIG_JSON_URL & CONFIG_ENV_URL will overwrite the existing files if provided.
+> [!NOTE]
+> `CONFIG_JSON_URL` & `CONFIG_ENV_URL` will overwrite the existing local files if provided.
 
 ---
 
-## ***Deploy Guide***
+## 🗄 ***Deploy Guide***
 - Only Deployable on Workflows
 - Soon Add for Heroku & VPS Users
 
@@ -101,7 +112,7 @@ Either Add these URL to these Variables or Directly Add a File on Repo as File n
 
 ## ***Advanced MLTB Status***:
 _Set the Code in the Required File `wserver.py` at the Last_
-**Path :** ./web/wserver.py 
+**Path :** `./web/wserver.py `
 
 ```py
 from time import sleep, time
@@ -136,18 +147,17 @@ def status():
 
 ---
 
-## ***Cron Job Workflow***:
+## ♻️ ***Cron Job Workflow***:
 - Format for Tg Message Edit/Update Interval
   - `*/5 * * * *`: Update Every 5mins Interval
-  > Due to Github Runner, Working Time Varies from 5min to more..
+    > Due to Github Runner, Working Time Varies from 5min to more..
   - `0 */2 * * *`: Update Every 2hrs Interval
 
 ---
 
-## ***Credits***:
+## ℹ️ ***Credits***:
 - SilentDemonSD (Developer)
 
-## ***References***:
-- Based on `xditya/BotStatus`
-- Based on `junedkh/ mirror-bot-status`
-- Written in PyroFork Framework (Extended Pyrogram)
+## 📚 ***References***:
+- Based on `xditya/BotStatus` & `junedkh/mirror-bot-status`
+- _Written in PyroFork Framework (Extended Pyrogram)_
