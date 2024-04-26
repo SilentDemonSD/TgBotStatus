@@ -34,6 +34,34 @@ _A Simple Telegram Status Updater to Pretify All your Bots for your Channel in s
   > Default: Telegram Bot Status :
 - `TIME_ZONE`: Time Zone for Sync with your Local Time
   > Default: Asia/Kolkata
+- `MSG_BUTTONS`: Make Awesome Telegram Buttons to show at the bottom of the Text.
+  > Unlimited Buttons with Any Design ! 
+  - ***How to Use ?***
+    - **Separator :** # for Text and Link, | for Button Separator, || for Next Line Separator
+    - _Sample Use Cases:_
+      ```
+      Input:
+      b_text1#b_url|b_text2#b_url||b_text3#b_url|b_text4#b_url
+      
+      Output: (Buttons)
+      [ b_text1 ][ b_text2 ]
+      [ b_text3 ][ b_text4 ]
+      
+      Input:
+      b_text1#b_url||b_text2#b_url|b_text3#b_url|b_text4#b_url
+      
+      Output: (Buttons)
+      [            b_text1            ]
+      [ b_text2 ][ b_text3 ][ b_text4 ]
+      
+      Input:
+      b_text1#b_url||b_text2#b_url||b_text3#b_url
+      [ b_text1 ]
+      [ b_text2 ]
+      [ b_text3 ]
+      ```
+
+---
 
 ### _`config.json` File SetUp :_
 - _Sections are Divided into 2 Parts_:

@@ -10,6 +10,7 @@ from pytz import utc, timezone
 from dotenv import load_dotenv
 from requests import get as rget
 from pyrogram import Client
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import FloodWait, MessageNotModified
 from pyrogram.raw import functions
 
@@ -61,7 +62,8 @@ except Exception as e:
     exit(1)
 
 HEADER_MSG = getenv("HEADER_MSG", "**Telegram Bot Status :**")
-FOOTER_MSG = getenv("FOOTER_MSG", "_Join FZX Paradox at @FZXParadox_\n**Repo :** __https://github.com/SilentDemonSD/TgBotStatus__")
+FOOTER_MSG = getenv("FOOTER_MSG", "**Updates :** _@FZXParadox_\n\n**Repo :** __https://github.com/SilentDemonSD/TgBotStatus__")
+MSG_BUTTONS = getenv("MSG_BUTTONS", "Join CyberPunk Now!#https://t.me/CyberPunkGrp")
 TIME_ZONE = getenv("TIME_ZONE", "Asia/Kolkata")
 
 log.info("Connecting pyroBotClient")
@@ -109,10 +111,23 @@ async def bot_info(user_id):
         return (await client.get_users(user_id)).mention
     except Exception:
         return ''
-    
+        
+def make_btns():
+    btns = []
+    if not MSG_BUTTONS:
+        return None
+    for row in MSG_BUTTONS.split('||'):
+        row_btns = []
+        for sbtn in row.split('|'):
+            btext, link = sbtn.split('#', maxsplit=1)
+            row_btns.append(InlineKeyboardButton(btext, url=link))
+        btns.append(row_btns)
+    return InlineKeyboardMarkup(btns)
+
 async def editMsg(chat_id, message_id, text):
     try:
-        return await client.edit_message_text(int(chat_id), int(message_id), text)
+        return await client.edit_message_text(int(chat_id), int(message_id), text, 
+            disable_web_page_preview=True)
     except FloodWait as f:
         await sleep(f.value * 1.2)
         await editMsg(chat_id, message_id, text)
