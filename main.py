@@ -253,4 +253,8 @@ __• Auto Status Update in 15 mins Interval__
 {FOOTER_MSG}"""
     await editStatusMsg(status_message)
 
-client.run(check_bots())
+async def main():
+    async with client:
+        await check_bots()
+
+client.run(main())
