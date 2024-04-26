@@ -66,7 +66,7 @@ TIME_ZONE = getenv("TIME_ZONE", "Asia/Kolkata")
 
 log.info("Connecting pyroBotClient")
 try:
-    client = Client("TgBotStatus", api_id=API_ID, api_hash=API_HASH, session_string=PYRO_SESSION)
+    client = Client("TgBotStatus", api_id=API_ID, api_hash=API_HASH, session_string=PYRO_SESSION, no_updates=True)
 except BaseException as e:
     log.warning(e)
     exit(1)
@@ -233,13 +233,9 @@ async def check_bots():
 ├ **Date :** `{current_time.strftime('%d %B %Y')}`
 └ **Time Zone :** `{TIME_ZONE} (UTC {current_time.strftime('%z')})`
 
-__• Auto Status Update in 5 mins Interval__
+__• Auto Status Update in 15 mins Interval__
 
 {FOOTER_MSG}"""
     await editStatusMsg(status_message)
 
-async def main():
-    async with client:
-        await check_bots()
-        
-client.run(main())
+client.run(check_bots())

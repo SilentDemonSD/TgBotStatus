@@ -2,7 +2,7 @@ name: Bot Status Check
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "*/15 * * * *"
   workflow_dispatch:
 
 jobs:
@@ -21,8 +21,8 @@ jobs:
           repository: ${{ secrets.REPO_NAME }}
       - name: Install Dependencies
         run: |
-          pip install --upgrade pip
-          pip install requests python-dotenv pytz pyrofork tgcrypto
+          pip install -q -U pip uv
+          uv pip install --system requests python-dotenv pytz pyrofork tgcrypto
       - name: Run the UserClient Script
         run: |
           python3 main.py
